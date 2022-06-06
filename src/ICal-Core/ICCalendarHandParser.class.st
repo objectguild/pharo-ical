@@ -15,6 +15,20 @@ Class {
 	#category : #'ICal-Core-Parser'
 }
 
+{ #category : #accessing }
+ICCalendarHandParser class >> calDavLineEndings [ 
+
+	^ Array with: Character lf
+]
+
+{ #category : #accessing }
+ICCalendarHandParser class >> defaultLineEndings [ 
+
+	^ Array 
+		with: Character cr 
+		with: Character lf
+]
+
 { #category : #'instance creation' }
 ICCalendarHandParser class >> on: aStream [
 	^self new
@@ -81,7 +95,14 @@ ICCalendarHandParser >> generator: anObject [
 
 { #category : #accessing }
 ICCalendarHandParser >> lineEndings [
-	^lineEndings ifNil:[lineEndings:= (Array with: Character cr with: Character lf).]
+
+	^ lineEndings ifNil: [ lineEndings := self class defaultLineEndings ]
+]
+
+{ #category : #accessing }
+ICCalendarHandParser >> lineEndings: anArray [
+
+	lineEndings := anArray
 ]
 
 { #category : #accessing }
