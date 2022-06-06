@@ -7,7 +7,7 @@ Class {
 		'tempAlarm',
 		'tempTime'
 	],
-	#category : 'ICal-Core-Parser'
+	#category : #'ICal-Core-Parser'
 }
 
 { #category : #'processing-properties' }
@@ -454,7 +454,7 @@ ICCalendarGenerator >> tzurl: aString parameters: aDictionary [
 ICCalendarGenerator >> uid: aString parameters: aDictionary [
 	| value |
 	value := self createValue: aString parameters: aDictionary default: String iCalType.
-	self tempComponent uid: value
+	self activeComponent uid: value
 ]
 
 { #category : #'processing-properties' }
