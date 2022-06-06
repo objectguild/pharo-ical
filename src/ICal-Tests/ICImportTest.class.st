@@ -164,6 +164,7 @@ ICImportTest >> setUp [
 'REPEAT:2' , String crlf ,
 'DURATION:PT15M' , String crlf ,
 'ACTION:DISPLAY' , String crlf ,
+'UID:TEST123', String crlf ,
 'END:VALARM' , String crlf ,
 'END:VEVENT' , String crlf ,
 'BEGIN:VEVENT' , String crlf ,
@@ -251,6 +252,7 @@ ICImportTest >> testImport [
 	self assert: tempAlarm trigger isRelatedToStart.
 	self assert: tempAlarm delay = (self durationClass minutes: 15).
 	self assert: tempAlarm isDisplay.
+	self assert: tempAlarm uid equals: 'TEST123'.
 								
 	eventAtDate := events detect: [:each | each summary = 'todo1'].
 	self assert: eventAtDate isHighPriority.
