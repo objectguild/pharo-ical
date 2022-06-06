@@ -97,6 +97,14 @@ ICCalendar class >> productId [
 	^'-//Squeak-iCalendar//-'
 ]
 
+{ #category : #copying }
+ICCalendar class >> unionAll: aCollection [ 
+
+	aCollection ifEmpty: [ ^ nil ].
+
+	^ aCollection first unionAll: aCollection allButFirst
+]
+
 { #category : #categories }
 ICCalendar >> addCategory: aCategory [
 	self categories add: aCategory
@@ -513,6 +521,27 @@ ICCalendar >> todosForDate: aDate [
 { #category : #todos }
 ICCalendar >> todosForDateAndTime: aDateAndTime [ 
 	^self todos select: [ :each | each startsInHour: aDateAndTime]
+]
+
+{ #category : #copying }
+ICCalendar >> union: aCalendar [ 
+
+	"Answer a new copy of myself combined with all components of aCalendar."
+
+	^ self unionAll: { aCalendar }
+]
+
+{ #category : #copying }
+ICCalendar >> unionAll: aCollection [ 
+
+	"Answer a new copy of myself combined with all components of the calendars in aCollection."
+
+	| copy |
+
+	copy := self copy.
+	aCollection do: [ :calendar | 
+		calendar componentsDo: [ :component | copy addComponent: component ] ].
+	^ copy
 ]
 
 { #category : #users }
