@@ -1,7 +1,7 @@
 Class {
 	#name : #ICGenerator,
 	#superclass : #Object,
-	#category : 'ICal-Core-Parser'
+	#category : #'ICal-Core-Parser'
 }
 
 { #category : #dispatching }
@@ -26,7 +26,9 @@ ICGenerator >> begin: aString [
 
 { #category : #productions }
 ICGenerator >> contentline: aName parameters: aCollection value: aString [
+
 	| selector |
+
 	selector := self asSelector: aName.
 	(self noParameterSelectors includes: selector)
 		ifTrue: [
@@ -34,9 +36,20 @@ ICGenerator >> contentline: aName parameters: aCollection value: aString [
 				perform: selector asSymbol
 				withArguments: (Array with: aString) ]
 		ifFalse: [
-			self
-				perform: (selector , 'parameters:') asSymbol
-				withArguments: (Array with: aString with: aCollection) ]
+			selector := (selector , 'parameters:') asSymbol.
+			(self class canUnderstand: selector) 
+				ifTrue: [ 
+					self
+						perform: selector 
+						withArguments: (Array with: aString with: aCollection) ]
+				ifFalse: [ 
+					| property |
+					property := ICUnknownProperty new
+					 	name: aName ;
+						value: aString ;
+						parameters: aCollection ;
+						yourself.
+					self addUnknownProperty: property ] ]
 ]
 
 { #category : #utilities }
@@ -50,21 +63,6 @@ ICGenerator >> createValue: aString parameters: aDictionary default: aType [
 ICGenerator >> createValue: aString parameters: aDictionary type: iCalType [
 	^(ICConversion propertyClassFor: iCalType)
 		fromICalString: aString parameters: aDictionary
-]
-
-{ #category : #dispatching }
-ICGenerator >> doesNotUnderstand: aMessage [
-	| property |
-	^((aMessage selector endsWith: 'parameters:')
-		and: [ aMessage arguments size = 2 ])
-			ifFalse: [ super doesNotUnderstand: aMessage ]
-			ifTrue: [ 
-				property := ICUnknownProperty new
-				 	name: (aMessage selector copyUpTo: $:);
-					value: aMessage arguments first;
-					parameters: aMessage arguments second;
-					yourself.
-				self addUnknownProperty: property ]
 ]
 
 { #category : #dispatching }
