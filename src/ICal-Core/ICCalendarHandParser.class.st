@@ -37,6 +37,12 @@ ICCalendarHandParser class >> on: aStream [
 ]
 
 { #category : #'instance creation' }
+ICCalendarHandParser class >> parseCalDavDataString: aString [
+
+	^ self parseCalendarString: aString lineEndings: self calDavLineEndings 
+]
+
+{ #category : #'instance creation' }
 ICCalendarHandParser class >> parseCalendarFile: aPath [
 	^self parseCalendarString: (FileStream readOnlyFileNamed: aPath) contentsOfEntireFile
 ]
