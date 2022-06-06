@@ -12,7 +12,7 @@ Class {
 		'value',
 		'lineEndings'
 	],
-	#category : 'ICal-Core-Parser'
+	#category : #'ICal-Core-Parser'
 }
 
 { #category : #'instance creation' }
@@ -183,11 +183,7 @@ ICCalendarHandParser >> stream: anObject [
 ICCalendarHandParser >> unfold: aString [
 	"remove any sequence of CR LF WSP"
 	| pattern whiteSpaces |
-	whiteSpaces := Array
-		with: Character space
-		with: Character tab
-		with: (Character value: 9)
-		with: (Character value: 32).
+	whiteSpaces := self whitespaces.
 	pattern := Array new: 3.
 	pattern at: 1 put: Character cr.
 	pattern at: 2 put: Character lf.
