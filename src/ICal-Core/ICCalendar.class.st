@@ -37,7 +37,7 @@ Class {
 		'version',
 		'name'
 	],
-	#category : 'ICal-Core-Model'
+	#category : #'ICal-Core-Model'
 }
 
 { #category : #accessing }
@@ -333,6 +333,20 @@ ICCalendar >> name [
 { #category : #accessing }
 ICCalendar >> name: aString [
 	name := aString
+]
+
+{ #category : #copying }
+ICCalendar >> postCopy [ 
+
+	super postCopy.
+
+	categories := categories copy.
+	journals := journals copy.
+	timezones := timezones copy.
+	todos := todos copy.
+	events := events copy.
+	users := users copy.
+	freeBusy := freeBusy copy
 ]
 
 { #category : #printing }
