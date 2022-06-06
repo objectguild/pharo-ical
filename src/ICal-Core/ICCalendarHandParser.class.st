@@ -63,11 +63,21 @@ ICCalendarHandParser class >> parseCalendarStream: aStream [
 
 { #category : #'instance creation' }
 ICCalendarHandParser class >> parseCalendarString: aString [
+
+	^ self parseCalendarString: aString lineEndings: nil
+]
+
+{ #category : #'instance creation' }
+ICCalendarHandParser class >> parseCalendarString: aString lineEndings: anArray [ 
+
 	| parser |
+
 	parser := self on: (ReadStream on: aString).
+	parser lineEndings: anArray.
 	parser generator: ICCalendarGenerator new.
 	parser parse.
-	^parser product
+
+	^ parser product
 ]
 
 { #category : #parsing }
