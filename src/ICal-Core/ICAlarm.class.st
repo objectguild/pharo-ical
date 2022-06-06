@@ -15,9 +15,10 @@ Class {
 		'textualDescription',
 		'trigger',
 		'attendees',
-		'summary'
+		'summary',
+		'uid'
 	],
-	#category : 'ICal-Core-Model'
+	#category : #'ICal-Core-Model'
 }
 
 { #category : #'accessing-actions' }
@@ -219,4 +220,16 @@ ICAlarm >> trigger [
 { #category : #accessing }
 ICAlarm >> trigger: aTrigger [ 
 	trigger := aTrigger
+]
+
+{ #category : #accessing }
+ICAlarm >> uid [ 
+
+	^ uid
+]
+
+{ #category : #accessing }
+ICAlarm >> uid: aString [ 
+
+	uid := aString
 ]
