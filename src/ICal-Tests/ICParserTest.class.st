@@ -1,7 +1,7 @@
 Class {
 	#name : #ICParserTest,
 	#superclass : #ICTest,
-	#category : 'ICal-Tests-Core'
+	#category : #'ICal-Tests-Core'
 }
 
 { #category : #accessing }
@@ -70,6 +70,76 @@ ICParserTest >> appleString [
 ]
 
 { #category : #accessing }
+ICParserTest >> calDavString [
+	^
+'BEGIN:VCALENDAR', String lf,
+'VERSION:2.0', String lf,
+'X-WR-CALNAME:kokyou', String lf,
+'PRODID:-//Apple Computer\, Inc//iCal 2.0//EN', String lf,
+'X-WR-RELCALID:AF9C0321-E1E0-4B72-8BEC-D3FD85B6C40F', String lf,
+'X-WR-TIMEZONE:Europe/Berlin', String lf,
+'CALSCALE:GREGORIAN', String lf,
+'METHOD:PUBLISH', String lf,
+'BEGIN:VTIMEZONE', String lf,
+'TZID:Europe/Berlin', String lf,
+'LAST-MODIFIED:20070529T193925Z', String lf,
+'BEGIN:DAYLIGHT', String lf,
+'DTSTART:20070325T010000', String lf,
+'TZOFFSETTO:+0200', String lf,
+'TZOFFSETFROM:+0000', String lf,
+'TZNAME:CEST', String lf,
+'END:DAYLIGHT', String lf,
+'BEGIN:STANDARD', String lf,
+'DTSTART:20071028T030000', String lf,
+'TZOFFSETTO:+0100', String lf,
+'TZOFFSETFROM:+0200', String lf,
+'TZNAME:CET', String lf,
+'END:STANDARD', String lf,
+'END:VTIMEZONE', String lf,
+'BEGIN:VEVENT', String lf,
+'DTSTART;VALUE=DATE:20070518', String lf,
+'SUMMARY:Neues Mitglied geworben Willkommen PJ', String lf,
+'UID:9D0D3C43-ED9D-4FC0-9212-5EBD7422D287', String lf,
+'SEQUENCE:2', String lf,
+'DTSTAMP:20070518T103318Z', String lf,
+'DURATION:P1D', String lf,
+'END:VEVENT', String lf,
+'BEGIN:VEVENT', String lf,
+'DTSTART;VALUE=DATE:20070610', String lf,
+'SUMMARY:erster Meilenstein - leere Welt\, Licht\, Schachbrettboden\, ein', String lf,
+'  Avatar\, ein importiertes Objekt', String lf,
+'UID:6C92A85C-A91E-4938-9871-DC9665CE1E97', String lf,
+'SEQUENCE:2', String lf,
+'DTSTAMP:20070518T103436Z', String lf,
+'DURATION:P1D', String lf,
+'END:VEVENT', String lf,
+'BEGIN:VEVENT', String lf,
+'DTSTART;TZID=Europe/Berlin:20070517T170000', String lf,
+'SUMMARY:Per Alkohol versucht neue Mitglieder zu werben. Es funktioniert!', String lf,
+' ', String lf,
+'UID:367AFB55-1068-476D-93F0-95040DE82811', String lf,
+'SEQUENCE:2', String lf,
+'DTSTAMP:20070518T103556Z', String lf,
+'DURATION:PT1H', String lf,
+'END:VEVENT', String lf,
+'BEGIN:VEVENT', String lf,
+'DTSTART;VALUE=DATE:20070517', String lf,
+'SUMMARY:Herrentag', String lf,
+'UID:22ED1F78-0871-4F69-AA4F-9AD7704831AA', String lf,
+'SEQUENCE:2', String lf,
+'DTSTAMP:20070518T103511Z', String lf,
+'DURATION:P1D', String lf,
+'END:VEVENT', String lf,
+'END:VCALENDAR', String lf,
+''
+]
+
+{ #category : #accessing }
 ICParserTest >> testParseAppleString [
 	ICCalendarHandParser parseCalendarString: self appleString
+]
+
+{ #category : #accessing }
+ICParserTest >> testParseCalDavString [
+	ICCalendarHandParser parseCalendarString: self calDavString lineEndings: ICCalendarHandParser calDavLineEndings 
 ]

@@ -181,18 +181,14 @@ ICCalendarHandParser >> parseParameters [
 
 { #category : #parsing }
 ICCalendarHandParser >> parseValue [
-	| crlf |
-	crlf := Array with: Character cr with: Character lf.
+
 	self stream next.	"ignore $:"
-	self
-		value:
-			(String
-				streamContents: [ :strm | 
-					strm nextPutAll: (self stream upToAll: crlf).	"no unfolding needed"
-					[ self whitespaces includes: self stream peek ]
-						whileTrue: [ 
-							self stream next.	"ignore whitespace"
-							strm nextPutAll: (self stream upToAll: crlf) ] ])	"no unfolding needed"
+	self value: (String streamContents: [ :strm | 
+		strm nextPutAll: (self stream upToAll: self lineEndings).	"no unfolding needed"
+		[ self whitespaces includes: self stream peek ]
+			whileTrue: [ 
+				self stream next.	"ignore whitespace"
+				strm nextPutAll: (self stream upToAll: self lineEndings) ] ])	"no unfolding needed"
 ]
 
 { #category : #accessing }
@@ -212,21 +208,25 @@ ICCalendarHandParser >> stream: anObject [
 
 { #category : #utilities }
 ICCalendarHandParser >> unfold: aString [
-	"remove any sequence of CR LF WSP"
-	| pattern whiteSpaces |
-	whiteSpaces := self whitespaces.
-	pattern := Array new: 3.
-	pattern at: 1 put: Character cr.
-	pattern at: 2 put: Character lf.
-	^whiteSpaces
+
+	"Remove any sequence of: (line endings), whitespace"
+
+	| pattern whitespaces |
+
+	whitespaces := self whitespaces.
+
+	pattern := Array new: (self lineEndings size + 1).
+	pattern replaceFrom: 1 to: self lineEndings size with: self lineEndings.
+
+	^ whitespaces
 		inject: (self unfoldEquals
 			ifTrue: [ self unfoldEquals: aString ]
 			ifFalse: [ aString ])
 		into: [ :string :each |
-			pattern at: 3 put: each.
+			pattern atLast: 1 put: each.
 			(string includesSubstring: pattern)
 				ifFalse: [ string ]
-				ifTrue: [ string copyReplaceAll: pattern with: ''  ] ]
+				ifTrue: [ string copyReplaceAll: pattern with: '' ] ]
 ]
 
 { #category : #testing }
@@ -236,22 +236,22 @@ ICCalendarHandParser >> unfoldEquals [
 
 { #category : #utilities }
 ICCalendarHandParser >> unfoldEquals: aString [
-	"remove any sequence of = CR LF WSP"
-	| pattern whiteSpaces |
-	whiteSpaces := Array
-		with: Character space
-		with: Character tab
-		with: (Character value: 9)
-		with: (Character value: 32).
-	pattern := Array new: 4.
+
+	"Remove any sequence of: =, (line endings), whitespace"
+
+	| pattern whitespaces |
+
+	whitespaces := self whitespaces.
+
+	pattern := Array new: (self lineEndings size + 2).
 	pattern at: 1 put: $=.
-	pattern at: 2 put: Character cr.
-	pattern at: 3 put: Character lf.
-	^whiteSpaces inject: aString into: [ :string :each |
-		pattern at: 4 put: each.
+	pattern replaceFrom: 2 to: (self lineEndings size + 1) with: self lineEndings.
+
+	^ whitespaces inject: aString into: [ :string :each |
+		pattern atLast: 1 put: each.
 		(string includesSubstring: pattern)
 			ifFalse: [ string ]
-			ifTrue: [ string copyReplaceAll: pattern with: ''  ] ]
+			ifTrue: [ string copyReplaceAll: pattern with: '' ] ]
 ]
 
 { #category : #accessing }

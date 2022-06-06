@@ -8,7 +8,7 @@ Class {
 		'otherTodo',
 		'event'
 	],
-	#category : 'ICal-Tests-Core'
+	#category : #'ICal-Tests-Core'
 }
 
 { #category : #private }
@@ -46,6 +46,45 @@ ICImportTest >> createTodo [
 				beHighPriority;
 				beCompleted;
 				yourself.
+]
+
+{ #category : #testing }
+ICImportTest >> importStringLineEnding: aString [ 
+
+	^ 'BEGIN:VCALENDAR' , aString ,
+		'PRODID:-//SMALLWIKI2-Calendar v1.0//-' , aString ,
+		'VERSION:2.0' , aString ,
+		'METHOD:PUBLISH' , aString ,
+		'BEGIN:VEVENT' , aString ,
+		'DT' , aString ,
+		' START' , aString ,
+		' ;' , aString ,
+		'	val' , aString ,
+		'	ue' , aString ,
+		'	=' , aString ,
+		' DA' , aString ,
+		' Te' , aString ,
+		'	:' , aString ,
+		' 20050' , aString ,
+		' 614' , aString ,
+		'DTEND:20050614T130000Z' , aString ,
+		'DTSTAMP:20050614T110853Z' , aString ,
+		'CREATED:20050614T110853Z' , aString ,
+		'LAST-MODIFIED:20050614T110853Z' , aString ,
+		'UID:http://localhost:8080/seaside/smallwiki/Calendar/app1' , aString ,
+		'SUMMARY:te' , aString ,
+		' s' , aString ,
+		' t' , aString ,
+		'DESCRIPTION:blabla' , aString ,
+		'CATEGORIES:' , aString ,
+		' business' , aString ,
+		'PRIORITY:1' , aString ,
+		'STATUS:CONFIRMED' , aString ,
+		'LOCATION:Be' , aString ,
+		'	rn' , aString ,
+		'TRANSP:OPAQUE' , aString ,
+		'END:VEVENT' , aString ,
+		'END:VCALENDAR' , aString
 ]
 
 { #category : #private }
@@ -297,42 +336,38 @@ ICImportTest >> testSynchronize [
 ]
 
 { #category : #testing }
-ICImportTest >> testUnfolding [
+ICImportTest >> testUnfoldingCalDav [
+
+	"CalDAV returns a 'calendar-data' value with only a LF character as line ending, because of XML parser normalization.
+
+	See RFC 4791 section 9.6: https://datatracker.ietf.org/doc/html/rfc4791#section-9.6	
+
+	Excerpt: 'Given that XML parsers normalize the two-
+      character sequence CRLF (US-ASCII decimal 13 and US-ASCII decimal
+      10) to a single LF character (US-ASCII decimal 10), the CR
+      character (US-ASCII decimal 13) MAY be omitted in calendar object
+      resources specified in the CALDAV:calendar-data XML element.'
+	"
 	| importString |
-	importString := 'BEGIN:VCALENDAR' , String crlf ,
-'PRODID:-//SMALLWIKI2-Calendar v1.0//-' , String crlf ,
-'VERSION:2.0' , String crlf ,
-'METHOD:PUBLISH' , String crlf ,
-'BEGIN:VEVENT' , String crlf ,
-'DT' , String crlf ,
-' START' , String crlf ,
-' ;' , String crlf ,
-'	val' , String crlf ,
-'	ue' , String crlf ,
-'	=' , String crlf ,
-' DA' , String crlf ,
-' Te' , String crlf ,
-'	:' , String crlf ,
-' 20050' , String crlf ,
-' 614' , String crlf ,
-'DTEND:20050614T130000Z' , String crlf ,
-'DTSTAMP:20050614T110853Z' , String crlf ,
-'CREATED:20050614T110853Z' , String crlf ,
-'LAST-MODIFIED:20050614T110853Z' , String crlf ,
-'UID:http://localhost:8080/seaside/smallwiki/Calendar/app1' , String crlf ,
-'SUMMARY:te' , String crlf ,
-' s' , String crlf ,
-' t' , String crlf ,
-'DESCRIPTION:blabla' , String crlf ,
-'CATEGORIES:' , String crlf ,
-' business' , String crlf ,
-'PRIORITY:1' , String crlf ,
-'STATUS:CONFIRMED' , String crlf ,
-'LOCATION:Be' , String crlf ,
-'	rn' , String crlf ,
-'TRANSP:OPAQUE' , String crlf ,
-'END:VEVENT' , String crlf ,
-'END:VCALENDAR' , String crlf.
+
+	importString := self importStringLineEnding: (String withAll: ICCalendarHandParser calDavLineEndings).
+
+	calendar := ICCalendarHandParser parseCalendarString: importString lineEndings: ICCalendarHandParser calDavLineEndings.
+
+	event := calendar events first.
+	self assert: event start = (self dateClass year: 2005 month: 6 day: 14).
+	self assert: event summary = 'test'.
+	self assert: event location = 'Bern'.
+	self assert: event isOpaque.
+	self assert: event textualDescription = 'blabla'.
+	self assert: event categories size = 1.
+	self assert: event categories first summary = 'business'.
+]
+
+{ #category : #testing }
+ICImportTest >> testUnfoldingDefault [
+	| importString |
+	importString := self importStringLineEnding: (String withAll: ICCalendarHandParser defaultLineEndings).
 	calendar := ICCalendarHandParser parseCalendarString: importString.
 	event := calendar events first.
 	self assert: event start = (self dateClass year: 2005 month: 6 day: 14).
