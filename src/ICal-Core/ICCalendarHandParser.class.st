@@ -260,9 +260,8 @@ ICCalendarHandParser >> value: anObject [
 
 { #category : #parsing }
 ICCalendarHandParser >> whitespaces [
+
 	^ Array
 		with: Character space
 		with: Character tab
-		with: (Character value: 9)
-		with: (Character value: 32)
 ]
