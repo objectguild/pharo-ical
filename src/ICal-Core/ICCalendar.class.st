@@ -100,7 +100,7 @@ ICCalendar class >> productId [
 { #category : #copying }
 ICCalendar class >> unionAll: aCollection [ 
 
-	aCollection ifEmpty: [ ^ nil ].
+	aCollection ifEmpty: [ ^ self new ].
 
 	^ aCollection first unionAll: aCollection allButFirst
 ]
