@@ -1,7 +1,7 @@
 Class {
 	#name : #ICConversion,
 	#superclass : #Object,
-	#category : 'ICal-Core-IO'
+	#category : #'ICal-Core-IO'
 }
 
 { #category : #'accessing-types' }
@@ -81,7 +81,8 @@ ICConversion class >> createdType [
 		name: 'CREATED' 
 		type: DateAndTime iCalType 
 		multivalued: false
-		utc: true
+		"Disabled UTC as workaround for Apple iCalendar timezone issue"
+		"utc: true"
 ]
 
 { #category : #accessing }
@@ -304,7 +305,8 @@ ICConversion class >> stampType [
 		name: 'DTSTAMP' 
 		type: DateAndTime iCalType 
 		multivalued: false
-		utc: true
+		"Disabled UTC as workaround for Apple iCalendar timezone issue"
+		"utc: true"
 ]
 
 { #category : #'accessing-types' }
