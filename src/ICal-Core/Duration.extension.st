@@ -31,8 +31,3 @@ Duration >> isPositive [
 	 	or: [ seconds = 0
 			and: [ nanos > 0 ] ]
 ]
-
-{ #category : #'*ICal-Core' }
-Duration >> weeks [
-	^self days quo: 7
-]
