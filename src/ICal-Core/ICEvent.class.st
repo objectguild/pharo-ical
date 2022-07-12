@@ -18,7 +18,7 @@ Class {
 		'transparency',
 		'schedule'
 	],
-	#category : 'ICal-Core-Model'
+	#category : #'ICal-Core-Model'
 }
 
 { #category : #accessing }
@@ -120,6 +120,12 @@ ICEvent >> exportOn: anExporter [
 	super exportOn: anExporter.
 	anExporter exportEnd: self end.
 	anExporter exportTransparency: self transparency
+]
+
+{ #category : #workaround }
+ICEvent >> id: aString [ 
+
+	self crTrace: 'Unexpected standalone property TZID:' , aString asString , ' (' , self asString , ')'
 ]
 
 { #category : #status }
