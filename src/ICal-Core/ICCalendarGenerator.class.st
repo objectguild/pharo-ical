@@ -124,7 +124,8 @@ ICCalendarGenerator >> createDateAndTime: aString parameters: aDictionary [
 	iCalType := aDictionary at: 'VALUE' ifAbsent: [ DateAndTime iCalType ].
 	tzid := aDictionary at: 'TZID' ifAbsent: [ nil ].
 	tzid isNil ifFalse: [
-		timezone := self product timezoneAt: tzid ].
+		timezone := (self product timezoneAt: tzid) ifNil: [ 
+			ZTimezone id: tzid ] ].
 	^(ICConversion propertyClassFor: iCalType)
 		fromICalString: aString
 		parameters: aDictionary

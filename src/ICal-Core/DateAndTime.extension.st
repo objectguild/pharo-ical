@@ -39,6 +39,19 @@ DateAndTime class >> fromICalString: aString [
 ]
 
 { #category : #'*ICal-Core' }
+DateAndTime class >> fromICalString: aString parameters: aDictionary timezone: timezone [
+
+	"Workaround for missing timezone handling in iCalendar library."
+
+	| dt |
+
+	dt := ICChronologyParser fromICalDateAndTimeString: aString class: self.
+	timezone ifNotNil: [ 
+		dt offset: (timezone offsetForTimestamp: dt) ].
+	^ dt
+]
+
+{ #category : #'*ICal-Core' }
 DateAndTime class >> fromVCardString: aString [
 	^ICChronologyParser fromVCardDateAndTimeString: aString class: self
 ]
