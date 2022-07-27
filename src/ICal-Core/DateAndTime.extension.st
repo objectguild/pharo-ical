@@ -45,9 +45,11 @@ DateAndTime class >> fromICalString: aString parameters: aDictionary timezone: t
 
 	| dt |
 
-	dt := ICChronologyParser fromICalDateAndTimeString: aString class: self.
+	dt := self fromICalString: aString.
+
 	timezone ifNotNil: [ 
-		dt offset: (timezone offsetForTimestamp: dt) ].
+		dt := dt translateTo: (timezone offsetForTimestamp: dt) ].
+
 	^ dt
 ]
 
