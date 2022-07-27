@@ -71,8 +71,10 @@ ICConversion class >> completedType [
 
 { #category : #accessing }
 ICConversion class >> componentClassFor: anICalComponentName [
-	^self supportedComponents detect: [ :each |
-		each iCalType sameAs: anICalComponentName ]
+
+	^ self supportedComponents 
+		detect: [ :each | each iCalType sameAs: anICalComponentName ] 
+		ifNone: [ self error: 'Component class not found for: ' , anICalComponentName asString ]
 ]
 
 { #category : #'accessing-types' }
