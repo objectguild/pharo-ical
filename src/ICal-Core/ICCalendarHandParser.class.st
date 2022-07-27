@@ -160,7 +160,7 @@ ICCalendarHandParser >> parseLine [
 { #category : #parsing }
 ICCalendarHandParser >> parseName [
 
-	self name: (self unfold: (self stream upToAny: ';:')).
+	self name: (self unfold: (self stream upToAny: #($;$:))).
 
 	self stream skip: -1
 ]
@@ -172,7 +172,7 @@ ICCalendarHandParser >> parseParameter [
 
 	self stream next. "ignore $;"
 
-	parameter := self stream upToAny: ';:'.
+	parameter := self stream upToAny: #($;$:).
 	paramName := parameter copyUpTo: $=. 
 	paramValue := parameter copyAfter: $=.
 
