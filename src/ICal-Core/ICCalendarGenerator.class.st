@@ -169,6 +169,10 @@ ICCalendarGenerator >> dtend: aString parameters: aDictionary [
 ICCalendarGenerator >> dtstamp: aString parameters: aDictionary [
 	| value |
 	value := self createDateAndTime: aString parameters: aDictionary.
+	self tempComponent isNil ifTrue: [ 
+		"Vivaldi Calendar seems to create orphan DTSTAMP property (in VCALENDAR scope)."
+		self crTrace: 'Skipping property outside of component scope: DTSTAMP:' , aString.
+		^ self ].
 	self tempComponent stamp: value
 ]
 
