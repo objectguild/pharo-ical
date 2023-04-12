@@ -125,7 +125,7 @@ ICEvent >> exportOn: anExporter [
 { #category : #workaround }
 ICEvent >> id: aString [ 
 
-	self crTrace: 'Unexpected standalone property TZID:' , aString asString , ' (' , self asString , ')'
+	"Unexpected standalone property TZID"
 ]
 
 { #category : #status }
